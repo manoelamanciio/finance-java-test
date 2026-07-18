@@ -8,7 +8,7 @@ A finance manager web app to help you keep track of your expenses. Built with An
 ### **Prerequisites**
 ```bash
 # Required Software
-- Java 17+                    # JDK for Spring Boot
+- Java 25+                    # JDK for Spring Boot
 - Maven 3.8+                 # Build tool
 - MySQL 8.0+                 # Relational database
 - MongoDB 7.0+               # NoSQL database
