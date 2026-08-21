@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +21,15 @@ import tech.artadevs.finances.repositories.UserRepository;
 public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final AuthenticationService authenticationService;
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    public UserService(
+            UserRepository userRepository,
+            AuthenticationService authenticationService) {
+        this.userRepository = userRepository;
+        this.authenticationService = authenticationService;
+    }
 
     public ValueAlreadyInUseResponseDto checkEmail(String email) {
         Optional<User> existingUserOpt = userRepository.findByEmail(email);

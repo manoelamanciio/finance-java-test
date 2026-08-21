@@ -10,7 +10,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tech.artadevs.finances.dtos.FinancialTransactionRequestDto;
@@ -25,12 +24,17 @@ import tech.artadevs.finances.repositories.FinancialTransactionRepository;
 public class FinancialTransactionService {
     private static final Logger logger = LoggerFactory.getLogger(FinancialTransactionService.class);
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
+    private final FinancialTransactionRepository financialTransactionRepository;
 
-    @Autowired
-    private FinancialTransactionRepository financialTransactionRepository;
+    public FinancialTransactionService(
+            AuthenticationService authenticationService,
+            FinancialTransactionRepository financialTransactionRepository) {
+        this.authenticationService = authenticationService;
+        this.financialTransactionRepository = financialTransactionRepository;
+    }
 
+    @Transactional
     public FinancialTransactionResponseDto create(FinancialTransactionRequestDto financialTransactionRequest) {
         User currentUser = authenticationService.getCurrentUser();
         logger.info("New financial transaction creation request description={} from user={}",
@@ -48,6 +52,7 @@ public class FinancialTransactionService {
         return newFinancialTransaction.toFinancialTransactionResponseDto();
     }
 
+    @Transactional
     public void update(Long id, FinancialTransactionRequestDto financialTransactionRequest) {
         User currentUser = authenticationService.getCurrentUser();
         logger.info("Financial transaction update request for id={} from user={}",
@@ -95,6 +100,7 @@ public class FinancialTransactionService {
         return optFinancialTransaction.get().toFinancialTransactionResponseDto();
     }
 
+    @Transactional
     public void deleteOwnItemById(Long id) {
         User currentUser = authenticationService.getCurrentUser();
         Optional<FinancialTransaction> optFinancialTransaction = financialTransactionRepository.findByIdAndUser(
