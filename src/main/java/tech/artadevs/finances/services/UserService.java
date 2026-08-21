@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import tech.artadevs.finances.dtos.UserRegisterRequestDto;
@@ -17,6 +18,7 @@ import tech.artadevs.finances.models.User;
 import tech.artadevs.finances.repositories.UserRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -39,6 +41,7 @@ public class UserService {
 
     }
 
+    @Transactional
     public UserResponseDto signup(UserRegisterRequestDto userDTO) {
         logger.info("Signup request: '{}' '{}'", userDTO.getName(), userDTO.getEmail());
 
@@ -82,6 +85,7 @@ public class UserService {
         return responseDto;
     }
 
+    @Transactional
     public UserResponseDto updateCurrentUser(UserRegisterRequestDto updatedUser) {
         logger.info("Update request: '{}' '{}'", updatedUser.getName(), updatedUser.getEmail());
         User currentUser = authenticationService.getCurrentUser();
@@ -108,6 +112,7 @@ public class UserService {
         return getUserResponseDto(userRepository.save(currentUser));
     }
 
+    @Transactional
     public void deleteAuthenticatedUser() {
         User currentUser = authenticationService.getCurrentUser();
         logger.info("Delete request: '{}' '{}'", currentUser.getName(), currentUser.getEmail());
