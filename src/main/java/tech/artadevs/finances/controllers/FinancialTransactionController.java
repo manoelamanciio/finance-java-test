@@ -2,6 +2,8 @@ package tech.artadevs.finances.controllers;
 
 import java.util.List;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -59,7 +61,7 @@ public class FinancialTransactionController {
 
     @GetMapping("/total")
     @SecurityRequirement(name = "bearerAuth")
-    public Double calculateTotalTransactionsValue() {
+    public BigDecimal calculateTotalTransactionsValue() {
         return financialTransactionService.getCurrentUserTransactionsTotalValue();
     }
 

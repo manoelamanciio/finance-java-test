@@ -5,6 +5,8 @@ import java.util.Date;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,7 +27,7 @@ public class FinancialTransaction {
     private Long id;
 
     @Column(nullable = false)
-    private Double value;
+    private BigDecimal value;
 
     @Column(nullable = false)
     private String description;
@@ -48,7 +50,7 @@ public class FinancialTransaction {
     public FinancialTransaction() {
     }
 
-    public FinancialTransaction(Double value, String description, User user) {
+    public FinancialTransaction(BigDecimal value, String description, User user) {
         this.value = value;
         this.description = description;
         this.user = user;
@@ -63,11 +65,11 @@ public class FinancialTransaction {
         return this;
     }
 
-    public Double getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public FinancialTransaction setValue(Double value) {
+    public FinancialTransaction setValue(BigDecimal value) {
         this.value = value;
         return this;
     }

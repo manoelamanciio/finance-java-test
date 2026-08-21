@@ -12,10 +12,12 @@ import tech.artadevs.finances.models.FinancialTransaction;
 import tech.artadevs.finances.models.User;
 import tech.artadevs.finances.repositories.FinancialTransactionRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class FinancialTransactionServiceTest {
@@ -41,7 +43,7 @@ class FinancialTransactionServiceTest {
 
         mockTransaction = new FinancialTransaction();
         mockTransaction.setId(1L);
-        mockTransaction.setValue(100.0);
+        mockTransaction.setValue(new BigDecimal("200.0"));
         mockTransaction.setDescription("Test transaction");
         mockTransaction.setUser(mockUser);
     }
@@ -49,7 +51,7 @@ class FinancialTransactionServiceTest {
     @Test
     void testCreate() {
         FinancialTransactionRequestDto requestDto = new FinancialTransactionRequestDto();
-        requestDto.setValue(200.0);
+        requestDto.setValue(new BigDecimal("200.0"));
         requestDto.setDescription("New transaction");
 
         when(authenticationService.getCurrentUser()).thenReturn(mockUser);
@@ -65,7 +67,7 @@ class FinancialTransactionServiceTest {
     @Test
     void testUpdate_Success() {
         FinancialTransactionRequestDto requestDto = new FinancialTransactionRequestDto();
-        requestDto.setValue(300.0);
+        requestDto.setValue(new BigDecimal("300.0"));
         requestDto.setDescription("Updated transaction");
 
         when(authenticationService.getCurrentUser()).thenReturn(mockUser);
@@ -74,7 +76,7 @@ class FinancialTransactionServiceTest {
         financialTransactionService.update(1L, requestDto);
 
         verify(financialTransactionRepository, times(1)).save(mockTransaction);
-        assertEquals(300.0, mockTransaction.getValue());
+        assertEquals(0, new BigDecimal("300.00").compareTo(mockTransaction.getValue()));
         assertEquals("Updated transaction", mockTransaction.getDescription());
     }
 
@@ -104,12 +106,13 @@ class FinancialTransactionServiceTest {
     @Test
     void testGetCurrentUserTransactionsTotalValue() {
         when(authenticationService.getCurrentUser()).thenReturn(mockUser);
-        when(financialTransactionRepository.getUserTransactionsTotalValue(mockUser)).thenReturn(500.0);
+        when(financialTransactionRepository.getUserTransactionsTotalValue(mockUser))
+                .thenReturn(new BigDecimal("500.0"));
 
-        Double totalValue = financialTransactionService.getCurrentUserTransactionsTotalValue();
+        BigDecimal totalValue = financialTransactionService.getCurrentUserTransactionsTotalValue();
 
         assertNotNull(totalValue);
-        assertEquals(500.0, totalValue);
+        assertEquals(0, new BigDecimal("500.00").compareTo(totalValue));
     }
 
     @Test

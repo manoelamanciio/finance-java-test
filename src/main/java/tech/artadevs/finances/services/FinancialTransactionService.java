@@ -1,6 +1,7 @@
 
 package tech.artadevs.finances.services;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -75,7 +76,7 @@ public class FinancialTransactionService {
                 .toList();
     }
 
-    public Double getCurrentUserTransactionsTotalValue() {
+    public BigDecimal getCurrentUserTransactionsTotalValue() {
         User currentUser = authenticationService.getCurrentUser();
         logger.info("Calculating total financial transaction value for user={}", currentUser.getEmail());
         return financialTransactionRepository.getUserTransactionsTotalValue(currentUser);

@@ -3,6 +3,7 @@ package tech.artadevs.finances.repositories;
 
 import java.util.List;
 import java.util.Optional;
+import java.math.BigDecimal;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,5 +18,5 @@ public interface FinancialTransactionRepository extends JpaRepository<FinancialT
     Optional<FinancialTransaction> findByIdAndUser(Long id, User user);
 
     @Query("SELECT SUM(ft.value) FROM FinancialTransaction ft WHERE ft.user = :user AND ft.deletedAt IS NULL")
-    Double getUserTransactionsTotalValue(User user);
+    BigDecimal getUserTransactionsTotalValue(User user);
 }

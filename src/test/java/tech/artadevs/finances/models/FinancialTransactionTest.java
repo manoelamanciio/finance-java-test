@@ -3,6 +3,8 @@ package tech.artadevs.finances.models;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import tech.artadevs.finances.dtos.FinancialTransactionResponseDto;
 
 import java.util.Date;
@@ -25,7 +27,7 @@ class FinancialTransactionTest {
 
         financialTransaction = new FinancialTransaction()
                 .setId(1L)
-                .setValue(100.0)
+                .setValue(new BigDecimal("100.00"))
                 .setDescription("Test Transaction")
                 .setUser(user)
                 .setCreatedAt(new Date())
@@ -34,8 +36,9 @@ class FinancialTransactionTest {
 
     @Test
     void testConstructor() {
-        FinancialTransaction transaction = new FinancialTransaction(200.0, "Constructor Transaction", user);
-        assertEquals(200.0, transaction.getValue());
+        FinancialTransaction transaction = new FinancialTransaction(new BigDecimal("200.00"), "Constructor Transaction",
+                user);
+        assertEquals(0, new BigDecimal("200.00").compareTo(transaction.getValue()));
         assertEquals("Constructor Transaction", transaction.getDescription());
         assertEquals(user, transaction.getUser());
         assertNull(transaction.getDeletedAt());

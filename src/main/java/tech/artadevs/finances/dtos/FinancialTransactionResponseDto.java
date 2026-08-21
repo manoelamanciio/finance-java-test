@@ -2,13 +2,15 @@ package tech.artadevs.finances.dtos;
 
 import java.util.Date;
 
+import java.math.BigDecimal;
+
 import lombok.Data;
 
 @Data
 public class FinancialTransactionResponseDto {
 
 	private Long id;
-	private Double value;
+	private BigDecimal value;
 	private String description;
 	private Date createdAt;
 	private Date updatedAt;
@@ -20,7 +22,7 @@ public class FinancialTransactionResponseDto {
 		return id;
 	}
 
-	public Double getValue() {
+	public BigDecimal getValue() {
 		return value;
 	}
 
@@ -31,6 +33,7 @@ public class FinancialTransactionResponseDto {
 	public Date getCreatedAt() {
 		return createdAt;
 	}
+
 	public Date getUpdatedAt() {
 		return updatedAt;
 	}
@@ -40,7 +43,7 @@ public class FinancialTransactionResponseDto {
 		return this;
 	}
 
-	public FinancialTransactionResponseDto setValue(Double value) {
+	public FinancialTransactionResponseDto setValue(BigDecimal value) {
 		this.value = value;
 		return this;
 	}
