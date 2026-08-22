@@ -58,9 +58,10 @@ public class FinancialTransactionService {
         logger.info("Financial transaction update request for id={} from user={}",
                 id, currentUser.getEmail());
 
-        Optional<FinancialTransaction> OptFinancialTransaction = financialTransactionRepository.findByIdAndUser(
-                id,
-                currentUser);
+        Optional<FinancialTransaction> OptFinancialTransaction = financialTransactionRepository
+                .findByIdAndUserAndDeletedAtIsNull(
+                        id,
+                        currentUser);
         if (OptFinancialTransaction.isEmpty()) {
             throw new ResourceNotFoundException("Financial Transaction");
         }
@@ -91,9 +92,10 @@ public class FinancialTransactionService {
 
     public FinancialTransactionResponseDto getOwnById(Long id) {
         User currentUser = authenticationService.getCurrentUser();
-        Optional<FinancialTransaction> optFinancialTransaction = financialTransactionRepository.findByIdAndUser(
-                id,
-                currentUser);
+        Optional<FinancialTransaction> optFinancialTransaction = financialTransactionRepository
+                .findByIdAndUserAndDeletedAtIsNull(
+                        id,
+                        currentUser);
         if (optFinancialTransaction.isEmpty())
             throw new ResourceNotFoundException("Financial Transaction");
 
@@ -103,9 +105,10 @@ public class FinancialTransactionService {
     @Transactional
     public void deleteOwnItemById(Long id) {
         User currentUser = authenticationService.getCurrentUser();
-        Optional<FinancialTransaction> optFinancialTransaction = financialTransactionRepository.findByIdAndUser(
-                id,
-                currentUser);
+        Optional<FinancialTransaction> optFinancialTransaction = financialTransactionRepository
+                .findByIdAndUserAndDeletedAtIsNull(
+                        id,
+                        currentUser);
         if (optFinancialTransaction.isEmpty())
             throw new ResourceNotFoundException("Financial Transaction");
 

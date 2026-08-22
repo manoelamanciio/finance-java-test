@@ -15,7 +15,7 @@ public interface FinancialTransactionRepository extends JpaRepository<FinancialT
     @Query("SELECT ft FROM FinancialTransaction ft WHERE ft.user = :user AND ft.deletedAt IS NULL")
     List<FinancialTransaction> findByUser(User user);
 
-    Optional<FinancialTransaction> findByIdAndUser(Long id, User user);
+    Optional<FinancialTransaction> findByIdAndUserAndDeletedAtIsNull(Long id, User user);
 
     @Query("SELECT SUM(ft.value) FROM FinancialTransaction ft WHERE ft.user = :user AND ft.deletedAt IS NULL")
     BigDecimal getUserTransactionsTotalValue(User user);
