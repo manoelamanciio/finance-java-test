@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
+import tech.artadevs.finances.mappers.FinancialTransactionMapper;
 import tech.artadevs.finances.dtos.FinancialTransactionRequestDto;
 import tech.artadevs.finances.dtos.FinancialTransactionResponseDto;
 import tech.artadevs.finances.exception.ResourceNotFoundException;
@@ -26,12 +27,16 @@ public class FinancialTransactionService {
 
     private final AuthenticationService authenticationService;
     private final FinancialTransactionRepository financialTransactionRepository;
+    private final FinancialTransactionMapper financialTransactionMapper;
 
     public FinancialTransactionService(
             AuthenticationService authenticationService,
-            FinancialTransactionRepository financialTransactionRepository) {
+            FinancialTransactionRepository financialTransactionRepository,
+            FinancialTransactionMapper financialTransactionMapper) {
+
         this.authenticationService = authenticationService;
         this.financialTransactionRepository = financialTransactionRepository;
+        this.financialTransactionMapper = financialTransactionMapper;
     }
 
     @Transactional
@@ -49,7 +54,7 @@ public class FinancialTransactionService {
         logger.info("New financial transaction, with id={}, created for user={}.",
                 newFinancialTransaction.getId(),
                 currentUser.getEmail());
-        return newFinancialTransaction.toFinancialTransactionResponseDto();
+        return financialTransactionMapper.toResponse(newFinancialTransaction);
     }
 
     @Transactional
@@ -79,7 +84,7 @@ public class FinancialTransactionService {
         logger.info("Fetching all financial transactions for user={}", currentUser.getEmail());
         return financialTransactionRepository.findByUser(currentUser)
                 .stream()
-                .map(FinancialTransaction::toFinancialTransactionResponseDto)
+                .map(financialTransactionMapper::toResponse)
                 .sorted(Comparator.comparing(FinancialTransactionResponseDto::getCreatedAt).reversed())
                 .toList();
     }
@@ -99,7 +104,7 @@ public class FinancialTransactionService {
         if (optFinancialTransaction.isEmpty())
             throw new ResourceNotFoundException("Financial Transaction");
 
-        return optFinancialTransaction.get().toFinancialTransactionResponseDto();
+        return financialTransactionMapper.toResponse(optFinancialTransaction.get());
     }
 
     @Transactional

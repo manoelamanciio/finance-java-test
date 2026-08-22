@@ -15,7 +15,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import tech.artadevs.finances.dtos.FinancialTransactionResponseDto;
 
 @Entity
 @Table(name = "financial_transactions")
@@ -119,13 +118,4 @@ public class FinancialTransaction {
         return this;
     }
 
-    public FinancialTransactionResponseDto toFinancialTransactionResponseDto() {
-        return new FinancialTransactionResponseDto()
-                .setId(id)
-                .setDescription(description)
-                .setValue(value)
-                .setCreatedAt(createdAt)
-                .setUpdatedAt(updatedAt);
-
-    }
 }

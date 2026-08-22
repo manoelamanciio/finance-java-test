@@ -11,10 +11,13 @@ import tech.artadevs.finances.exception.ResourceNotFoundException;
 import tech.artadevs.finances.models.FinancialTransaction;
 import tech.artadevs.finances.models.User;
 import tech.artadevs.finances.repositories.FinancialTransactionRepository;
+import tech.artadevs.finances.mappers.FinancialTransactionMapper;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+
+import org.mockito.Spy;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,6 +30,9 @@ class FinancialTransactionServiceTest {
 
     @Mock
     private FinancialTransactionRepository financialTransactionRepository;
+
+    @Spy
+    private FinancialTransactionMapper financialTransactionMapper = new FinancialTransactionMapper();
 
     @InjectMocks
     private FinancialTransactionService financialTransactionService;
@@ -71,7 +77,8 @@ class FinancialTransactionServiceTest {
         requestDto.setDescription("Updated transaction");
 
         when(authenticationService.getCurrentUser()).thenReturn(mockUser);
-        when(financialTransactionRepository.findByIdAndUserAndDeletedAtIsNull(1L, mockUser)).thenReturn(Optional.of(mockTransaction));
+        when(financialTransactionRepository.findByIdAndUserAndDeletedAtIsNull(1L, mockUser))
+                .thenReturn(Optional.of(mockTransaction));
 
         financialTransactionService.update(1L, requestDto);
 
@@ -85,7 +92,8 @@ class FinancialTransactionServiceTest {
         FinancialTransactionRequestDto requestDto = new FinancialTransactionRequestDto();
 
         when(authenticationService.getCurrentUser()).thenReturn(mockUser);
-        when(financialTransactionRepository.findByIdAndUserAndDeletedAtIsNull(1L, mockUser)).thenReturn(Optional.empty());
+        when(financialTransactionRepository.findByIdAndUserAndDeletedAtIsNull(1L, mockUser))
+                .thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> financialTransactionService.update(1L, requestDto));
         verify(financialTransactionRepository, never()).save(any(FinancialTransaction.class));
@@ -118,7 +126,8 @@ class FinancialTransactionServiceTest {
     @Test
     void testGetOwnById_Success() {
         when(authenticationService.getCurrentUser()).thenReturn(mockUser);
-        when(financialTransactionRepository.findByIdAndUserAndDeletedAtIsNull(1L, mockUser)).thenReturn(Optional.of(mockTransaction));
+        when(financialTransactionRepository.findByIdAndUserAndDeletedAtIsNull(1L, mockUser))
+                .thenReturn(Optional.of(mockTransaction));
 
         FinancialTransactionResponseDto responseDto = financialTransactionService.getOwnById(1L);
 
@@ -129,7 +138,8 @@ class FinancialTransactionServiceTest {
     @Test
     void testGetOwnById_ResourceNotFound() {
         when(authenticationService.getCurrentUser()).thenReturn(mockUser);
-        when(financialTransactionRepository.findByIdAndUserAndDeletedAtIsNull(1L, mockUser)).thenReturn(Optional.empty());
+        when(financialTransactionRepository.findByIdAndUserAndDeletedAtIsNull(1L, mockUser))
+                .thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> financialTransactionService.getOwnById(1L));
     }
@@ -137,7 +147,8 @@ class FinancialTransactionServiceTest {
     @Test
     void testDeleteOwnItemById_Success() {
         when(authenticationService.getCurrentUser()).thenReturn(mockUser);
-        when(financialTransactionRepository.findByIdAndUserAndDeletedAtIsNull(1L, mockUser)).thenReturn(Optional.of(mockTransaction));
+        when(financialTransactionRepository.findByIdAndUserAndDeletedAtIsNull(1L, mockUser))
+                .thenReturn(Optional.of(mockTransaction));
 
         financialTransactionService.deleteOwnItemById(1L);
 
@@ -148,7 +159,8 @@ class FinancialTransactionServiceTest {
     @Test
     void testDeleteOwnItemById_ResourceNotFound() {
         when(authenticationService.getCurrentUser()).thenReturn(mockUser);
-        when(financialTransactionRepository.findByIdAndUserAndDeletedAtIsNull(1L, mockUser)).thenReturn(Optional.empty());
+        when(financialTransactionRepository.findByIdAndUserAndDeletedAtIsNull(1L, mockUser))
+                .thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> financialTransactionService.deleteOwnItemById(1L));
     }

@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import tech.artadevs.finances.dtos.FinancialTransactionResponseDto;
-
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,15 +80,4 @@ class FinancialTransactionTest {
         assertEquals(deletedAt, financialTransaction.getDeletedAt());
     }
 
-    @Test
-    void testToFinancialTransactionResponseDto() {
-        FinancialTransactionResponseDto dto = financialTransaction.toFinancialTransactionResponseDto();
-
-        assertNotNull(dto);
-        assertEquals(financialTransaction.getId(), dto.getId());
-        assertEquals(financialTransaction.getValue(), dto.getValue());
-        assertEquals(financialTransaction.getDescription(), dto.getDescription());
-        assertEquals(financialTransaction.getCreatedAt(), dto.getCreatedAt());
-        assertEquals(financialTransaction.getUpdatedAt(), dto.getUpdatedAt());
-    }
 }
