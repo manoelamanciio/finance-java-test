@@ -15,6 +15,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -77,6 +78,14 @@ public class GlobalExceptionHandler {
                 return ResponseEntity
                                 .status(HttpStatus.BAD_REQUEST)
                                 .body(new ApiErrorDto(errors.toString()));
+        }
+
+        @ExceptionHandler(ResponseStatusException.class)
+        public ResponseEntity<Object> handleResponseStatusException(
+                        ResponseStatusException ex) {
+                return ResponseEntity
+                                .status(ex.getStatusCode())
+                                .body(new ApiErrorDto(ex.getReason()));
         }
 
         @ExceptionHandler(Exception.class)
