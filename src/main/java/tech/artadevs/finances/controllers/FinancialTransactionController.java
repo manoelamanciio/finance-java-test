@@ -35,13 +35,14 @@ public class FinancialTransactionController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @SecurityRequirement(name = "bearerAuth")
     public FinancialTransactionResponseDto createTransaction(
             @Valid @RequestBody FinancialTransactionRequestDto financialTransactionRequest) {
         return financialTransactionService.create(financialTransactionRequest);
     }
 
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     public void updateTransaction(@PathVariable Long id,

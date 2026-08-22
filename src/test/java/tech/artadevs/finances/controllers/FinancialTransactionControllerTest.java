@@ -104,7 +104,7 @@ class FinancialTransactionControllerTest extends AbstractIntegrationTest {
                 ResponseEntity<FinancialTransactionResponseDto> response = restTemplate.postForEntity(
                                 "/user/me/transactions", entity, FinancialTransactionResponseDto.class);
 
-                assertEquals(HttpStatus.OK, response.getStatusCode());
+                assertEquals(HttpStatus.CREATED, response.getStatusCode());
                 FinancialTransactionResponseDto transaction = response.getBody();
                 assertNotNull(transaction);
                 assertEquals(0, new BigDecimal("100.00").compareTo(transaction.getValue()));
@@ -133,7 +133,7 @@ class FinancialTransactionControllerTest extends AbstractIntegrationTest {
                 ResponseEntity<Void> updateResponse = restTemplate.exchange(
                                 "/user/me/transactions/" + transactionId, HttpMethod.PUT, updateEntity, Void.class);
 
-                assertEquals(HttpStatus.ACCEPTED, updateResponse.getStatusCode());
+                assertEquals(HttpStatus.NO_CONTENT, updateResponse.getStatusCode());
 
                 ResponseEntity<FinancialTransactionResponseDto> getResponse = restTemplate.exchange(
                                 "/user/me/transactions/" + transactionId, HttpMethod.GET, new HttpEntity<>(headers),
@@ -194,7 +194,7 @@ class FinancialTransactionControllerTest extends AbstractIntegrationTest {
                         ResponseEntity<FinancialTransactionResponseDto> createResponse = restTemplate.postForEntity(
                                         "/user/me/transactions", entity, FinancialTransactionResponseDto.class);
 
-                        assertEquals(HttpStatus.OK, createResponse.getStatusCode(),
+                        assertEquals(HttpStatus.CREATED, createResponse.getStatusCode(),
                                         "Transaction creation failed for index: " + i);
                         assertNotNull(createResponse.getBody(), "Response body is null for transaction index: " + i);
                 }
