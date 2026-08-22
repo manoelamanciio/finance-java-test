@@ -1,7 +1,6 @@
 
 package tech.artadevs.finances.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,11 +23,16 @@ import tech.artadevs.finances.services.UserService;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    private final UserService userService;
+    private final AuthenticationService authenticationService;
+
+    public UserController(
+            UserService userService,
+            AuthenticationService authenticationService) {
+        this.userService = userService;
+        this.authenticationService = authenticationService;
+    }
 
     @PostMapping("/signup")
     public UserResponseDto signup(@Valid @RequestBody UserRegisterRequestDto user) {
