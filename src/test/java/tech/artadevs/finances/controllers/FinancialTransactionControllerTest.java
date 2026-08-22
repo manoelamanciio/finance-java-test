@@ -260,4 +260,60 @@ class FinancialTransactionControllerTest extends AbstractIntegrationTest {
                 assertNotNull(transactions);
                 assertTrue(transactions.length == 0);
         }
+
+        @Test
+        void testCreateTransactionWithZeroValue() {
+                FinancialTransactionRequestDto request = new FinancialTransactionRequestDto()
+                                .setValue(new BigDecimal("0.00"))
+                                .setDescription("Invalid transaction");
+
+                HttpEntity<FinancialTransactionRequestDto> entity = new HttpEntity<>(request, headers);
+
+                ResponseEntity<String> response = restTemplate.postForEntity(
+                                "/user/me/transactions", entity, String.class);
+
+                assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        }
+
+        @Test
+        void testCreateTransactionWithNegativeValue() {
+                FinancialTransactionRequestDto request = new FinancialTransactionRequestDto()
+                                .setValue(new BigDecimal("-10.00"))
+                                .setDescription("Invalid transaction");
+
+                HttpEntity<FinancialTransactionRequestDto> entity = new HttpEntity<>(request, headers);
+
+                ResponseEntity<String> response = restTemplate.postForEntity(
+                                "/user/me/transactions", entity, String.class);
+
+                assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        }
+
+        @Test
+        void testCreateTransactionWithTooManyDecimalPlaces() {
+                FinancialTransactionRequestDto request = new FinancialTransactionRequestDto()
+                                .setValue(new BigDecimal("10.001"))
+                                .setDescription("Invalid transaction");
+
+                HttpEntity<FinancialTransactionRequestDto> entity = new HttpEntity<>(request, headers);
+
+                ResponseEntity<String> response = restTemplate.postForEntity(
+                                "/user/me/transactions", entity, String.class);
+
+                assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        }
+
+        @Test
+        void testCreateTransactionWithBlankDescription() {
+                FinancialTransactionRequestDto request = new FinancialTransactionRequestDto()
+                                .setValue(new BigDecimal("10.00"))
+                                .setDescription("    ");
+
+                HttpEntity<FinancialTransactionRequestDto> entity = new HttpEntity<>(request, headers);
+
+                ResponseEntity<String> response = restTemplate.postForEntity(
+                                "/user/me/transactions", entity, String.class);
+
+                assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        }
 }

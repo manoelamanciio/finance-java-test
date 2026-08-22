@@ -26,7 +26,7 @@ public class FinancialTransaction {
     @Column(nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(precision = 19, scale = 2, nullable = false)
     private BigDecimal value;
 
     @Column(nullable = false)
